@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            color: #BDBDBD;
+            background-color: black;
+        }
+        h1{
+            /* background-color: white; */
+            color: white;
+        }
+        #show{
+            
+            display: grid;
+            grid-template-columns: repeat(3, 30%);
+            grid-gap: 2%;
+            margin: auto;
+            margin-top: 2%;
+            padding-left: 5%;
+        }
+        #show > div{
+            border: 1px solid #FAFAFA;
+            /* margin: 5%; */
+        }
+        #nav-bar{
+            text-align: center;
+            margin-bottom: 2%;
+            /* background-color: whitesmoke; */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="nav-bar">
+        <h1>Movie Search Engine</h1>
+        <div id="input">
+            <input type="text" placeholder="Search" id='query'>
+            <button onclick='search()'>Search</button>
+        </div>
+    </div>
+    <hr>
+
+    <div id="show">
+
+    </div>
+</body>
+</html>
+
+<script>
+
+    let show = document.getElementById('show');
+
+    async function search(){
+
+        try{
+            let query = document.createElement('query').value;
+
+            let res = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=9f16de42&s=${query}`)
+
+            data = await res.json();
+
+            console.log(data.Search);
+            appendMovies(data.Search);
+        }
+        catch(e){
+            alert(`${e}`);
+        }
+    }
+
+    function appendMovies(movies){
+        
+        show.innerHTML = null;
+
+        movies.forEach(({Poster, Title, Year}) => {
+            
+            console.log(Poster, Title, Year);
+            if(Poster !== 'N/A'){
+                let div = document.createElement('div');
+                div.style.height = '350px';
+                div.style.padding = '20px';
+
+                let imgBox = document.createElement('div');
+                imgBox.style.width = '100%';
+                // imgBox.style.border = '1px solid white';
+                imgBox.style.margin = 'auto';
+                let img = document.createElement('img');
+                img.src = Poster;
+                img.style.height = '200px';
+                // img.style.width = '100%';
+                imgBox.append(img);
+
+                let text = document.createElement('div');
+                text.style.paddingLeft = '20px';
+                let h2 = document.createElement('h2');
+                h2.innerText = Title;
+
+                let h3 = document.createElement('h3');
+                h3.innerText = Year;
+                
+                text.append(h2,h3);
+
+                div.append(imgBox, text);
+                div.style.justifyContent ='center'; 
+
+                show.append(div);
+            }
+        });
+
+
+
+    }
+
+    
+
+</script>
