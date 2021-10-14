@@ -60,7 +60,7 @@
         try{
             let query = document.createElement('query').value;
 
-            let res = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=9f16de42&s=${query}`)
+            let res = await fetch(`https://www.omdbapi.com/?i=tt3896198&apikey=9f16de42&s=${query}`)
 
             data = await res.json();
 
