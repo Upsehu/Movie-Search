@@ -76,7 +76,7 @@
             let query = document.getElementById('query').value;
             console.log(query);
 
-            let res = await fetch(`http://www.omdbapi.com/?apikey=9f16de42&s=${query}`)
+            let res = await fetch(`https://www.omdbapi.com/?apikey=9f16de42&s=${query}`)
 
             console.log(res);
             data = await res.json();
