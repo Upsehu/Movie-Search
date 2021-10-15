@@ -10,6 +10,11 @@
             color: #BDBDBD;
             background-color: black;
         }
+        #container{
+            margin: auto;
+            /* border: 1px solid whitesmoke; */
+            justify-content: center;
+        }
         h1{
             /* background-color: white; */
             color: white;
@@ -18,7 +23,7 @@
             
             display: grid;
             grid-template-columns: repeat(3, 30%);
-            grid-gap: 2%;
+            grid-gap: 4%;
             margin: auto;
             margin-top: 2%;
             padding-left: 5%;
@@ -32,21 +37,29 @@
             margin-bottom: 2%;
             /* background-color: whitesmoke; */
         }
+        #error{
+            margin: auto;
+        }
     </style>
 </head>
 <body>
 
-    <div id="nav-bar">
-        <h1>Movie Search Engine</h1>
-        <div id="input">
-            <input type="text" placeholder="Search" id='query'>
-            <button onclick='search()'>Search</button>
+    <div id="container">
+        <div id="nav-bar">
+            <h1>Movie Search Engine</h1>
+            <div id="input">
+                <input type="text" placeholder="Search" id='query'>
+                <button onclick='search()'>Search</button>
+            </div>
         </div>
-    </div>
-    <hr>
-
-    <div id="show">
-
+        <hr>
+    
+        <div id="show">
+    
+        </div>
+        <div id='error'>
+    
+        </div>
     </div>
 </body>
 </html>
@@ -55,20 +68,24 @@
 
     let show = document.getElementById('show');
 
+    let error = document.getElementById('error');
+
     async function search(){
 
         try{
-            let query = document.createElement('query').value;
+            let query = document.getElementById('query').value;
+            console.log(query);
 
-            let res = await fetch(`https://www.omdbapi.com/?i=tt3896198&apikey=9f16de42&s=${query}`)
+            let res = await fetch(`http://www.omdbapi.com/?apikey=9f16de42&s=${query}`)
 
+            console.log(res);
             data = await res.json();
 
-            console.log(data.Search);
+            console.log(data);
             appendMovies(data.Search);
         }
         catch(e){
-            alert(`${e}`);
+            showError();
         }
     }
 
@@ -78,20 +95,25 @@
 
         movies.forEach(({Poster, Title, Year}) => {
             
-            console.log(Poster, Title, Year);
+            // console.log(Poster, Title, Year);
             if(Poster !== 'N/A'){
                 let div = document.createElement('div');
-                div.style.height = '350px';
+                div.style.height = '600px';
                 div.style.padding = '20px';
+                div.style.justifyContent = 'center';
+                div.style.borderRadius = '20px'
 
                 let imgBox = document.createElement('div');
-                imgBox.style.width = '100%';
+                
+                // imgBox.style.width = '100%';
+                imgBox.style.height = '80%';
                 imgBox.style.overflow = 'hidden';
+                imgBox.style.justifyContent = 'center';
                 // imgBox.style.border = '1px solid white';
                 imgBox.style.margin = 'auto';
                 let img = document.createElement('img');
                 img.src = Poster;
-                img.style.height = '200px';
+                img.style.height = '100%';
                 // img.style.width = '100%';
                 imgBox.append(img);
 
@@ -114,6 +136,29 @@
 
 
 
+    }
+
+
+    function showError(){
+
+
+        error.innerHTML = null;
+
+        let div = document.createElement('div');
+        div.style.border = '1px solid white';
+        div.style.width = '20%';
+        div.style.margin = 'auto';
+
+        let img = document.createElement('img');
+        img.style.width = '100%';
+        img.src = 'https://c.tenor.com/PqB4w3BhK_MAAAAS/no-names.gif';
+
+        div.append(img);
+
+        // let body = document.querySelector('body')
+
+        error.append(div);
+        
     }
 
     
