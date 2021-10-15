@@ -94,7 +94,9 @@
         show.innerHTML = null;
 
         movies.forEach(({Poster, Title, Year}) => {
-            
+
+            error.innerHTML= null;
+
             // console.log(Poster, Title, Year);
             if(Poster !== 'N/A'){
                 let div = document.createElement('div');
@@ -115,7 +117,7 @@
                 let img = document.createElement('img');
                 img.src = Poster;
                 img.style.height = '100%';
-                // img.style.width = '100%';
+                img.style.width = '100%';
                 imgBox.append(img);
 
                 let text = document.createElement('div');
