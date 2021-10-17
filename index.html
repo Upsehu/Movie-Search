@@ -40,6 +40,19 @@
         #error{
             margin: auto;
         }
+        input{
+            width: 200px;
+        }
+        #search-box{
+
+            width: 206px;
+            height: 200px;
+            border: 1px solid black;
+            border-top: none;
+            overflow: scroll;
+            /* background-color: whitesmoke; */
+            margin: auto;
+        }
     </style>
 </head>
 <body>
@@ -48,8 +61,11 @@
         <div id="nav-bar">
             <h1>Movie Search Engine</h1>
             <div id="input">
-                <input type="text" placeholder="Search" id='query'>
-                <button onclick='search()'>Search</button>
+                <input oninput='debounce(main, 1000)' type="text" placeholder="Search Movie Name" id='query'>
+                <!-- <button onclick='search()'>Search</button> -->
+                <div id='search-box'>
+
+                </div>
             </div>
         </div>
         <hr>
@@ -66,38 +82,58 @@
 
 <script>
 
+    let timeId;
+
+    let search_box = document.getElementById('search-box');
+
     let show = document.getElementById('show');
 
     let error = document.getElementById('error');
 
-    async function search(){
+    async function search(movie){
+
+        let query = document.getElementById('query').value;
 
         try{
-            let query = document.getElementById('query').value;
-            console.log(query);
 
             let res = await fetch(`https://www.omdbapi.com/?apikey=9f16de42&s=${query}`)
 
-            console.log(res);
+            // console.log(res);
             data = await res.json();
 
-            console.log(data);
-            appendMovies(data.Search);
+            return data;
+            
         }
         catch(e){
             showError();
         }
     }
 
-    function appendMovies(movies){
+    function appendMovies(data){
         
+
+
+        search_box.innerHTML = null;
+
         show.innerHTML = null;
+
+        console.log(data.Response);
+        if(data.Response === 'False'){
+            console.log('error');
+            showError();
+            return;
+        }
+
+        // console.log(data);
+        let movies = data.Search;
+
+        console.log(movies);
 
         movies.forEach(({Poster, Title, Year}) => {
 
-            error.innerHTML= null;
+            error.innerHTML = null;
 
-            // console.log(Poster, Title, Year);
+            console.log(Poster, Title, Year);
             if(Poster !== 'N/A'){
                 let div = document.createElement('div');
                 div.style.height = '600px';
@@ -134,6 +170,14 @@
                 div.style.justifyContent ='center'; 
 
                 show.append(div);
+
+                // Add movie name to search-box
+                let p = document.createElement('p');
+                p.innerText = Title;
+
+                search_box.append(p);
+
+
             }
         });
 
@@ -164,6 +208,29 @@
         
     }
 
+
+    async function main(){
+
+        let data = await search();
+
+        console.log(data);
+
+        appendMovies(data);
+    }
+
+
+    function debounce(func, delay){
+
+        if(timeId){
+            clearTimeout(timeId);
+        }
+
+        timeId = setTimeout(function(){
+            func()
+        }, delay);
+    }
+
+    
     
 
 </script>
