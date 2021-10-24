@@ -5,68 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/navbar.css">
     <style>
-        *{
-            color: #BDBDBD;
-            background-color: black;
-        }
-        #container{
-            margin: auto;
-            /* border: 1px solid whitesmoke; */
-            justify-content: center;
-        }
-        h1{
-            /* background-color: white; */
-            color: white;
-        }
-        #show{
-            
-            display: grid;
-            grid-template-columns: repeat(3, 30%);
-            grid-gap: 4%;
-            margin: auto;
-            margin-top: 2%;
-            padding-left: 5%;
-        }
-        #show > div{
-            border: 1px solid #FAFAFA;
-            /* margin: 5%; */
-        }
-        #nav-bar{
-            text-align: center;
-            margin-bottom: 2%;
-            /* background-color: whitesmoke; */
-        }
-        #error{
-            margin: auto;
-        }
-        input{
-            width: 200px;
-        }
-        #search-box{
-
-            width: 206px;
-            height: 200px;
-            border: 1px solid black;
-            border-top: none;
-            overflow: scroll;
-            /* background-color: whitesmoke; */
-            margin: auto;
-        }
+        
     </style>
 </head>
 <body>
+    <nav>
+
+
+
+    </nav>
+    
 
     <div id="container">
         <div id="nav-bar">
             <h1>Movie Search Engine</h1>
-            <div id="input">
-                <input oninput='debounce(main, 1000)' type="text" placeholder="Search Movie Name" id='query'>
-                <!-- <button onclick='search()'>Search</button> -->
-                <div id='search-box'>
-
-                </div>
-            </div>
+            
         </div>
         <hr>
     
@@ -80,157 +36,4 @@
 </body>
 </html>
 
-<script>
-
-    let timeId;
-
-    let search_box = document.getElementById('search-box');
-
-    let show = document.getElementById('show');
-
-    let error = document.getElementById('error');
-
-    async function search(movie){
-
-        let query = document.getElementById('query').value;
-
-        try{
-
-            let res = await fetch(`https://www.omdbapi.com/?apikey=9f16de42&s=${query}`)
-
-            // console.log(res);
-            data = await res.json();
-
-            return data;
-            
-        }
-        catch(e){
-            showError();
-        }
-    }
-
-    function appendMovies(data){
-        
-
-
-        search_box.innerHTML = null;
-
-        show.innerHTML = null;
-
-        console.log(data.Response);
-        if(data.Response === 'False'){
-            console.log('error');
-            showError();
-            return;
-        }
-
-        // console.log(data);
-        let movies = data.Search;
-
-        console.log(movies);
-
-        movies.forEach(({Poster, Title, Year}) => {
-
-            error.innerHTML = null;
-
-            console.log(Poster, Title, Year);
-            if(Poster !== 'N/A'){
-                let div = document.createElement('div');
-                div.style.height = '600px';
-                div.style.padding = '20px';
-                div.style.justifyContent = 'center';
-                div.style.borderRadius = '20px'
-
-                let imgBox = document.createElement('div');
-                
-                // imgBox.style.width = '100%';
-                imgBox.style.height = '80%';
-                imgBox.style.overflow = 'hidden';
-                imgBox.style.justifyContent = 'center';
-                imgBox.style.borderRadius = '20px';
-                // imgBox.style.border = '1px solid white';
-                imgBox.style.margin = 'auto';
-                let img = document.createElement('img');
-                img.src = Poster;
-                img.style.height = '100%';
-                img.style.width = '100%';
-                imgBox.append(img);
-
-                let text = document.createElement('div');
-                text.style.paddingLeft = '20px';
-                let h2 = document.createElement('h2');
-                h2.innerText = Title;
-
-                let h3 = document.createElement('h3');
-                h3.innerText = Year;
-                
-                text.append(h2,h3);
-
-                div.append(imgBox, text);
-                div.style.justifyContent ='center'; 
-
-                show.append(div);
-
-                // Add movie name to search-box
-                let p = document.createElement('p');
-                p.innerText = Title;
-
-                search_box.append(p);
-
-
-            }
-        });
-
-
-
-    }
-
-
-    function showError(){
-
-
-        error.innerHTML = null;
-
-        let div = document.createElement('div');
-        div.style.border = '1px solid white';
-        div.style.width = '20%';
-        div.style.margin = 'auto';
-
-        let img = document.createElement('img');
-        img.style.width = '100%';
-        img.src = 'https://c.tenor.com/PqB4w3BhK_MAAAAS/no-names.gif';
-
-        div.append(img);
-
-        // let body = document.querySelector('body')
-
-        error.append(div);
-        
-    }
-
-
-    async function main(){
-
-        let data = await search();
-
-        console.log(data);
-
-        appendMovies(data);
-    }
-
-
-    function debounce(func, delay){
-
-        if(timeId){
-            clearTimeout(timeId);
-        }
-
-        timeId = setTimeout(function(){
-            func()
-        }, delay);
-    }
-
-    
-    
-
-</script>
+<script type="module" src="scripts/index.js" ></script>
